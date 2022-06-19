@@ -11,9 +11,9 @@ initMixin(Vue); // 拓展了init方法  见原型上的方法拓展成一个个�
 initLifeCycle(Vue);
 initGlobalAPI(Vue)
 
-// Vue.prototype.$watch = function(exprOrFn,cb,options) {
+Vue.prototype.$watch = function(exprOrFn,cb,options) {
     
-// }
+}
 
 
 

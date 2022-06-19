@@ -830,6 +830,10 @@
     initLifeCycle(Vue);
     initGlobalAPI(Vue);
 
+    Vue.prototype.$watch = function(exprOrFn,cb,options) {
+        
+    };
+
     return Vue;
 
 }));
