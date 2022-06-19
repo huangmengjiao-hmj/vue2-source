@@ -15,17 +15,25 @@ let id = 0 ; // 记录每次创建的watcher
 
 // 每个属性有dep 每个属性就是一个被观察者 watcher是一个观察者 当属性改变会通知watcher去更新
 class Watcher{ // 不同组件有不同的watcher
-    constructor(vm,fn,options){ //fn代表的是渲染的方法
+    constructor(vm,exprOrFn,options,cb){ //fn代表的是渲染的方法
         this.id = id++; // 将id作为每一个watcher的唯一标识
         this.renderWatcher = options; // options 代表是否为一个渲染Watcher
-        this.getter = fn; // getter意味着调用这个函数可以发生取值
+        if (typeof exprOrFn === 'string') {
+            this.getter = function () {
+                return vm[exprOrFn]
+            }
+        }else {
+
+            this.getter = exprOrFn; // getter意味着调用这个函数可以发生取值
+        }
         this.deps=[];// 计算属性
         this.vm = vm
+        this.cb = cb
         this.depsId = new Set()
         this.lazy = options.lazy
         this.dirty = this.lazy; // 缓存值
-        this.lazy?undefined : this.get()
-        
+        this.value = this.lazy?undefined : this.get()
+        this.user  = options.user; // 标识是否是用户自己的watch
     }
     evaluate(){
         this.value =  this.get(); // 获取到用户的函数返回值 并且标识为脏
@@ -65,7 +73,11 @@ class Watcher{ // 不同组件有不同的watcher
         }
     }
     run(){
-        this.get()
+        let oldValue = this.value
+        let newValue = this.get()
+        if (this.user) {
+            this.cb.call(this.vm,newValue,oldValue)
+        }
     }
 }
 function flashSchedulerQueue(){

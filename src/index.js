@@ -1,7 +1,7 @@
 import { initGlobalAPI } from "./gloablApi";
 import { initMixin } from "./init"
 import { initLifeCycle } from "./lifecycle";
-import { nextTick } from "./observe/wtacher";
+import Watcher, { nextTick } from "./observe/wtacher";
 
 function Vue(options) { // options就是用户的选项 包括 data,methods等
     this._init(options)
@@ -11,8 +11,11 @@ initMixin(Vue); // 拓展了init方法  见原型上的方法拓展成一个个�
 initLifeCycle(Vue);
 initGlobalAPI(Vue)
 
-Vue.prototype.$watch = function(exprOrFn,cb,options) {
-    
+
+// 最终watch调用的是这个
+Vue.prototype.$watch = function(exprOrFn,cb,options = {}) {  
+    // 核心就是 watcher监听的值发生了变化直接执行cb函数即可
+   new Watcher(this,exprOrFn,{user:true},cb)
 }
 
 
