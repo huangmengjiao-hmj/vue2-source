@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">   
+        {{fristName}}
+    </div>
+    <!-- <script src="./vue.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+    <script>
+        /** 
+         * watch 
+         * 
+        */
+       const vm = new Vue({
+           el:"#app",
+           data(){
+               return {
+                   fristName:"zhu",
+                   lastName:"feng"
+               }
+           },
+           /** 
+            *  watch的写法 
+            *  1.直接写成一个函数 ：fristName(val){console.log(val);}
+            *  2.写成一个数组 : fristName:[
+                   (newVal,oldVal) => {
+                       console.log(oldVal);
+                   },
+                   (newVal,oldVal) => {
+                       console.log(newVal);
+                   }
+               ]
+               3.在methods中定义一个方法写在watch中 fristName:'fn' 或者是fristName:['fn']
+               4.vm.$watch(() => vm.fristName,(newVal,oldVal) => {
+        console.log(newVal,oldVal,'11');
+       })
+           */
+           watch:{
+               fristName:[
+                   (newVal,oldVal) => {
+                       console.log(oldVal);
+                   },
+                   (newVal,oldVal) => {
+                       console.log(newVal);
+                   }
+               ]
+           }
+       });
+       setTimeout(() => {
+           vm.fristName = "li"
+       },2000)
+       // 不管watch怎么写 最后都是会转化为$watch
+       vm.$watch(() => vm.fristName,(newVal,oldVal) => {
+        console.log(newVal,oldVal,'11');
+       })
+    </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app" style="background: yellow; ">
+        <div style="color: #ebebeb; ">
+            {{name}} hello {{name}} red
+        </div>
+       
+        <span>
+            {{age}}
+        </span>
+    </div>
+    <script src="./vue.js"></script>
+    <script>
+        const vm = new Vue({
+            data() { //c数据进行代理
+                return {
+                    name: "zf",
+                    age: 20,
+                    address: {
+                        num: 40,
+                        content: "回龙观"
+                    },
+                    hobby: ['eat', 'drink', {
+                        a: 1
+                    }]
+                }
+            },
+            el: "#app" //我们要将数据解析到el元素上
+        });
+
+        setTimeout(() => {
+            vm.name = "hmj"
+            vm.age = 23
+
+            vm._update(vm._render()) // 重新根据数据渲染出一个新的虚拟DOM
+        },1000)
+        /**
+         *  1.模板引擎 性能差 需要正则匹配替换 1.0的时候没有引入虚拟DOM
+         *  2.采用虚拟DOM 数据变化后比较虚拟DOM的差异 最后更新需要更新的地方
+         *  3.核心就是我们需要将模板变成js语法 ，通过js生成虚拟DOM
+         *   想变成语法树再重新组装代码成为新的语法  将template语法转化成render方法
+         */
+
+
+         /**
+          * 1) 将数据先处理成响应式 通过initState方法 针对于对象来说主要是增加defineProperty方法 针对数组而言就是重写方法
+          * 2) 模板编译：将模板编译成ast语法树，将ast语法树生成render方法
+          * 3) 调用render函数 会进行取值操作 产生对应的虚拟DOM render(){_c('div',null,_v(name))} 会触发get方法
+          * 4) 将虚拟DOM渲染成真实DOM
+          * 
+          */
+    </script>
+</body>
+
+</html>
